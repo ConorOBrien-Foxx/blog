@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Dragon Ipsum - Source Code</title>
+	<link href="STYLE.css" rel="stylesheet">
+	<link href="prism.css" rel="stylesheet">
+	<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+		tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+	});
+	</script>
+	<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</head>
+<body>
+	<header><span id="title"><a href="/blog">Dragon Ipsum</a></span></header>
+	<div id="container">
+		<p>Modified Fri May 06 2016.</p>
+		<h1 id="source-code">Source Code</h1>
+<h2 id="post.bat"><code>post.bat</code></h2>
+<pre class="language-batch"><code>@ECHO OFF
+SET arg1=%1
+IF [%arg1%]==[] GOTO absent
+IF NOT EXIST %arg1% GOTO notExist
+REM Error if not .md
+IF NOT [%arg1:~-3%]==[.md] GOTO wrongFile
+
+:routine
+    SET fileName=%arg1:~0,-3%
+    CD blog
+        IF EXIST %fileName%.html GOTO fileExistant
+    CD ..
+    pandoc --ascii -S %arg1% -f markdown --mathjax -t html -o %fileName%.html
+    node make.js %fileName%.html
+    CD blog
+        git add .
+        git commit -am &quot;posted entry %fileName%&quot;
+        git push
+    CD ..
+    GOTO EOF
+
+:fileExistant
+    ECHO Error: file {%fileName%.html} already exists.
+    CD ..
+    ECHO.
+    GOTO EOF
+
+:wrongFile
+    ECHO Error: file {%arg1%} is not a .md file.
+    ECHO.
+    GOTO EOF
+
+:notExist
+    ECHO Error: file {%arg1%} does not exist in current directory.
+    ECHO.
+    GOTO EOF
+
+:absent
+    ECHO Posts a blog post.
+    ECHO.
+    ECHO Usage:
+    ECHO   post [blogpost.md]
+    GOTO EOF
+
+:EOF
+ECHO Done executing.</code></pre>
+<h2 id="make.js"><code>make.js</code></h2>
+<pre class="language-js"><code>&quot;use strict&quot;;
+const fs = require(&quot;fs&quot;);
+const cheerio = require(&quot;cheerio&quot;);
+const BLOG_TITLE = &quot;Dragon Ipsum&quot;;
+
+const fileName = process.argv[2];
+fs.readFile(fileName, function(err, logData){
+    if(err) throw err;
+    
+    let fileInfo = logData.toString(); //.split(&quot;\n&quot;);
+    let doc = cheerio.load(fileInfo);
+    let post_title = doc(&quot;h1&quot;).text();
+    let date = new Date().toDateString();
+    let newFile = `&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;${BLOG_TITLE} - ${post_title}&lt;/title&gt;
+    &lt;link href=&quot;STYLE.css&quot; rel=&quot;stylesheet&quot;&gt;
+    &lt;link href=&quot;prism.css&quot; rel=&quot;stylesheet&quot;&gt;
+    &lt;script type=&quot;text/x-mathjax-config&quot;&gt;
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [[&#39;$&#39;,&#39;$&#39;], [&#39;\\\\(&#39;,&#39;\\\\)&#39;]]}
+    });
+    &lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot; async src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;&lt;span id=&quot;title&quot;&gt;&lt;a href=&quot;/blog&quot;&gt;${BLOG_TITLE}&lt;/a&gt;&lt;/span&gt;&lt;/header&gt;
+    &lt;div id=&quot;container&quot;&gt;
+        &lt;p&gt;Modified ${date}.&lt;/p&gt;
+        ${fileInfo}
+    &lt;/div&gt;
+    &lt;script src=&quot;prism.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;`;
+    // console.log(newFile);
+    fs.writeFile(`blog/${fileName}`, newFile, function(err){
+        if(err){
+            console.log(err);
+            return;
+        }
+        
+        console.log(&quot;updated index&quot;);
+        
+        // add to list of posts
+        fs.appendFile(&quot;posts.txt&quot;, fileName + &quot; &quot; + date + &quot;: &quot; + post_title + &quot;\n&quot;, function(err){
+            if(err){
+                conosle.log(err);
+                return;
+            }
+            
+            fs.readFile(&quot;posts.txt&quot;, function(err, data){
+                if(err){
+                    console.log(err);
+                    return;
+                }
+                // remake index
+                data = data.toString();
+                let list = data.split(&quot;\n&quot;).filter(x =&gt; x).map(e =&gt; {
+                    e = e.split(&quot; &quot;);
+                    let n = e.shift();
+                    return `&lt;li&gt;&lt;a href=&quot;${n}&quot;&gt;${e.join(&quot; &quot;)}&lt;/a&gt;&lt;/li&gt;`
+                });
+                let newIndex = `&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Dragon Ipsum - I made a better blog!&lt;/title&gt;
+    &lt;link href=&quot;STYLE.css&quot; rel=&quot;stylesheet&quot;&gt;
+    &lt;link href=&quot;prism.css&quot; rel=&quot;stylesheet&quot;&gt;
+    &lt;script type=&quot;text/x-mathjax-config&quot;&gt;
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [[&#39;$&#39;,&#39;$&#39;], [&#39;\\(&#39;,&#39;\\)&#39;]]}
+    });
+    &lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot; async src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;&lt;span id=&quot;title&quot;&gt;Dragon Ipsum&lt;/span&gt;&lt;/header&gt;
+    &lt;div id=&quot;container&quot;&gt;
+    &lt;h1&gt;Posts&lt;/h1&gt;
+    &lt;ul&gt;
+        ${list.join(&quot;\n&quot;)}
+    &lt;/ul&gt;
+    &lt;script src=&quot;prism.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;`;
+                fs.writeFile(&quot;blog/index.html&quot;, newIndex, (err) =&gt; console.log(err));
+            });
+        });
+    });
+});</code></pre>
+
+	</div>
+	<script src="prism.js" type="text/javascript"></script>
+</body>
+</html>
