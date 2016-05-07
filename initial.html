@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Dragon Ipsum - I made a better blog!</title>
+	<link href="STYLE.css" rel="stylesheet">
+	<link href="prism.css" rel="stylesheet">
+	<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+		tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+	});
+	</script>
+	<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</head>
+<body>
+	<header><span id="title"><a href="main.html">Dragon Ipsum</a></span></header>
+	<div id="container">
+		<p>Modified Fri May 06 2016.</p>
+		<h1 id="i-made-a-better-blog">I made a better blog!</h1>
+<p>So, this one uses markdown! I&#8217;m using <a href="http://prismjs.com/index.html"><code>prism.js</code></a> for syntax highlighting, and <a href="http://mathjax.org/">MathJax</a> for math. I am compiling the markdown with <a href="pandoc.org/">pandoc</a> and using fancy scripts to update the blog. I&#8217;m making it read-only for now, but if you <em>really</em> have something to say, you can always <a href="http://chat.stackexchange.com/rooms/240/the-nineteenth-byte">ping me</a> here (if you have an SE account).</p>
+<h2 id="some-javascript">Some JavaScript</h2>
+<pre class="language-js"><code>function someBeautifulJavaScript(code){
+    eval(code);     // oh I am so evil
+    if(typeof someVar !== &quot;undefined&quot;){
+        // why did you define someVar?!
+        var deleted = delete someVar;
+        if(!deleted){   // what trickery is this
+            eval(someVar);
+        } else {
+            console.log(&quot;You failed!&quot;);
+        }
+    }
+}</code></pre>
+<h2 id="some-brain-trickery">Some Brain Trickery</h2>
+<pre class="language-brainfuck"><code>--&lt;-&lt;&lt;+[+[&lt;+&gt;---&gt;-&gt;-&gt;-&lt;&lt;&lt;]&gt;]&lt;&lt;--.&lt;++++++.&lt;&lt;-..&lt;&lt;.&lt;+.&gt;&gt;.&gt;&gt;.&lt;&lt;&lt;.+++.&gt;&gt;.&gt;&gt;-.&lt;&lt;&lt;+.
+This is primo&#39;s world record short BF answer; here&#39;s the url:
+http://codegolf DOT stackexchange DOT com/questions/55422/hello HYPHEN world/68494#68494</code></pre>
+<h2 id="some-math">Some math</h2>
+<p><span class="math display">\[f=:+*-\]</span></p>
+<p><span class="math display">\[-9=f\;3\]</span></p>
+<p>This is really some J (see below) put into MathJax. It looks nice because J is a math-like language. Though JavaScript in MathJax doesn&#8217;t look nearly as nice: <span class="math inline">\(function a(x, y){ return x + y; }\)</span></p>
+<h2 id="some-j">Some J</h2>
+<pre class="language-j"><code>f =: +*-
+-9 = f 3                    NB. this is true, it&#39;s a fork
+(+*- (3)) = ((+3) * (-3))
+u =: +
+f =: *
+v =: -
+n =: 3
+f =: u f v
+(u f v) n                   NB. -9
+(u n) f (v n)               NB. -9</code></pre>
+
+	</div>
+	<script src="prism.js" type="text/javascript"></script>
+</body>
+</html>
