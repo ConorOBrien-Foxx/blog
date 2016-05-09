@@ -1,1 +1,1 @@
-# [blog](http://www.conorobrien-foxx.github.io/blog)
+# [blog](http://conorobrien-foxx.github.io/blog)
