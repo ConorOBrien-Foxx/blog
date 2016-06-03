@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Dragon Ipsum - A quick update</title>
+	<link href="STYLE.css" rel="stylesheet">
+	<link href="prism.css" rel="stylesheet">
+	<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+		tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+	});
+	</script>
+	<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	<script type="text/javascript" src="main.js"></script>
+</head>
+<body>
+	<header><span id="title"><a href="/blog">Dragon Ipsum</a></span></header>
+	<div id="container">
+		<p>Modified June 2, 2016.</p>
+		<h1 id="a-quick-update">A quick update</h1>
+<p>Okay, so I&#8217;ve gotten well enough in order to explain a bit. I&#8217;ve gotten an infection about nine days ago, it&#8217;s quite painful, but it&#8217;s getting better. Swelling won&#8217;t go down for 6-8 weeks (rip me), so I&#8217;ll be on the computer sparsely. As thus, I am publishing my current work for The Glorious Quest for Tetris. Too lazy to github it, but yeah.</p>
+<h2 id="index.html">index.html</h2>
+<pre class="language-html"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;VGoL Circuitry&lt;/title&gt;
+    &lt;script src=&quot;https://d3js.org/d3.v3.min.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;circuits.js&quot;&gt;&lt;/script&gt;
+    &lt;link href=&quot;style.css&quot; rel=&quot;STYLESHEET&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id=&quot;parts&quot;&gt;
+        &lt;h2&gt;Part Builder&lt;/h2&gt;
+        &lt;hr&gt;
+        &lt;h2&gt;Options&lt;/h2&gt;
+        cell size: &lt;input type=&quot;number&quot; id=&quot;cellSize&quot; value=30&gt;
+        &lt;button id=&quot;update&quot;&gt;update values&lt;/button&gt;
+        &lt;div id=&quot;xy&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div id=&quot;boardHolder&quot;&gt;
+        &lt;svg id=&quot;board&quot; width=&quot;500&quot; height=&quot;500&quot;&gt;
+            
+        &lt;/svg&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h2 id="circuits.js">circuits.js</h2>
+<pre class="language-js"><code>// PART 1: The UI
+class Tile {
+    constructor(x, y, width, height){
+        width = width || 1;
+        height = height || 1;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.rot = 0;
+    }
+    
+    rotateRight(){
+        
+    }
+    
+    rotateLeft(){
+        
+    }
+    
+    mirrorHorizontal(){
+        
+    }
+    
+    mirrorVertical(){
+        
+    }
+}
+
+const padFactor = 1.2;
+
+class Grid {
+    /*
+     * width and height are given in number of tiles
+     * cellWidth is the display size of a cell
+     */
+    constructor(width, height, cellWidth){
+        /* let board = [];
+        for(let i = 0; i &lt; height; i++){
+            board[i] = [];
+            for(let j = 0; j &lt; width; j++){
+                board[i][j] = new Tile(j, i);
+            }
+        } */
+        this.tiles = [];
+        this.width = width;
+        this.height = height;
+        this.cellWidth = cellWidth;
+    }
+    
+    pushTile(tile){
+        if(!(tile instanceof Tile)){
+            let chopped = JSON.stringify(tile);
+            let sliced = chopped.slice(0, 10);
+            if(sliced !== chopped) sliced += &quot;...&quot; + chopped.slice(-1);
+            let name = tile.constructor.name.toLowerCase();
+            
+            throw new Error(`argument 0 is not a Tile, ${sliced} is a${/[aeiou]/.test(name[0]) ? &quot;n&quot; : &quot;&quot;} ${name}`);
+        }
+        
+        this.tiles.push(tile);
+    }
+    
+    addTile(...args){
+        this.pushTile(new Tile(...args));
+    }
+    
+    init(){
+        this.tiles.forEach(tile =&gt;
+            svg.append(&quot;rect&quot;)
+                .attr(&quot;x&quot;, tile.x + padFactor * this.cellWidth * tile.x)
+                .attr(&quot;y&quot;, tile.y + padFactor * this.cellWidth * tile.y)
+                .attr(&quot;width&quot;, this.cellWidth * tile.width)
+                .attr(&quot;height&quot;, this.cellWidth * tile.height)
+                .attr(&quot;fill&quot;, &quot;grey&quot;)
+                .attr(&quot;class&quot;, &quot;tile&quot;)
+                .on(&quot;drag&quot;, function(){
+                    console.log(&quot;dragging&quot;);
+                    let t = d3.select(this);
+                    t.attr(&quot;x&quot;, d3.event.x).attr(&quot;y&quot;, d3.event.y);
+                })
+        );
+    }
+    
+    update(){
+        let rcts = svg.selectAll(&quot;rect.tile&quot;).data(this.tiles);
+        
+        rcts.enter().append(&quot;rect&quot;) // add missing tiles
+            .attr(&quot;fill&quot;, &quot;grey&quot;)
+            .attr(&quot;class&quot;, &quot;tile&quot;);
+        rcts.exit().remove();
+        
+        rcts.attr(&quot;x&quot;, tile =&gt; tile.x + padFactor * this.cellWidth * tile.x)
+            .attr(&quot;y&quot;, tile =&gt; tile.y + padFactor * this.cellWidth * tile.y)
+            .attr(&quot;width&quot;, tile =&gt; this.cellWidth * tile.width)
+            .attr(&quot;height&quot;, tile =&gt; this.cellWidth * tile.height);
+    }
+}
+
+let board = new Grid(5, 5, 50);
+
+board.addTile(0, 2);
+board.addTile(1, 2);
+board.addTile(2, 2);
+board.addTile(2, 1);
+board.addTile(1, 0);
+
+
+// various ids
+let cellSize;
+let update;
+let svg;
+let field;
+
+
+// our drag effect
+let drag = d3.behavior.drag().on(&quot;drag&quot;, function(data){
+    let t = d3.select(this);
+    let sx = Math.floor(d3.event.x / (board.cellWidth * padFactor));
+    let sy = Math.floor(d3.event.y / (board.cellWidth * padFactor));
+    t.attr(&quot;x&quot;, sx * board.cellWidth * padFactor + 1).attr(&quot;y&quot;, sy * board.cellWidth * padFactor + 1.2);
+});
+
+window.addEventListener(&quot;load&quot;, function(){
+    svg = d3.select(&quot;svg&quot;);
+    field = document.querySelector(&quot;svg&quot;);
+    
+    board.init();
+    
+    cellSize = document.getElementById(&quot;cellSize&quot;);
+    update = document.getElementById(&quot;update&quot;);
+    update.addEventListener(&quot;click&quot;, function(){
+        board.cellWidth = parseInt(cellSize.value, 10);
+        board.update();
+    });
+    
+    d3.selectAll(&quot;rect.tile&quot;).call(drag);
+});</code></pre>
+<h2 id="style.css">style.css</h2>
+<pre class="language-css"><code>html {
+    font-family: Gadugi;
+}
+
+html, body {
+    height: 90%;
+}
+
+#parts {
+    border: 1px solid;
+    width: 200px;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    text-align: center;
+    height: 90%;
+    margin: auto;
+}
+
+#boardHolder {
+    padding: 15px;
+    margin-left: 260px;
+    width: auto;
+}</code></pre>
+
+	</div>
+	<script src="prism.js" type="text/javascript"></script>
+</body>
+</html>

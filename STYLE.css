@@ -46,7 +46,12 @@ header {
 	font-weight: bold;
 	font-size: 50px;
 }
-#title a:hover {
+
+header a {
+	color: white;
+}
+
+header a:hover {
 	color: #ddd;
 	transition: .1s all linear;
 }
