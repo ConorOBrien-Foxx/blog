@@ -99,7 +99,7 @@ for(let p of a){
 
 let f = (x, y, z) =&gt; y + z + x;
 console.log(f(...&quot;Hi!&quot;));   // &quot;i!H&quot;</code></pre>
-<p>What I love about the spread operator is that you can use it as a function argument operator! When used in this way, it&#8217;s called the &#8220;rest operator&#8221;.</p>
+<p>What I love about the spread operator is that you can use it as a function argument operator! When used in this way, it&#8217;s called the &#8220;rest paramter&#8221;.</p>
 <pre class="language-js"><code>// returns it&#39;s arguments as an array
 // That is, `a` contains all the arguments of the function
 let f = (...a) =&gt; a;
@@ -108,7 +108,7 @@ let f = (...a) =&gt; a;
 // `a` is an empty array when only one argument is given.
 let g = (b, ...a) =&gt; [b, a];
 
-// however, functions like (...a, k) are not valid -- the rest operator
+// however, functions like (...a, k) are not valid -- the rest parameter
 // can only be used as the last argument to a function.</code></pre>
 <h3 id="array-interaction-with-the-spread-operator">Array interaction with the spread operator</h3>
 <p>Say you have an array <code>A</code> and a function <code>f</code>. Here is a chart dictating some helpful results.</p>
@@ -116,8 +116,8 @@ let g = (b, ...a) =&gt; [b, a];
 f = (...a) =&gt; a;   f(A)     equals     [A]
 f = (a) =&gt; a;      f(...A)  equals     A[0]
 f = (...a) =&gt; a;   f(...A)  equals     A</code></pre>
-<h3 id="my-personal-thoughts-on-the-rest-operator">My personal thoughts on the rest operator</h3>
-<p>While I like the rest operator, I feel as if it could&#8217;ve been defined better. For example, there is little ambiguity when I write <code>(...a, b)</code>&#8211;I refer to an array <code>a</code> containing all but the last argument, which then is <code>b</code>. The question then is what the behaviour would be when only a single argument is passed. I would say that <code>a</code> should contain a single member, and let <code>b</code> be undefined, though I&#8217;m sure there would be contention on this subject.</p>
+<h3 id="my-personal-thoughts-on-the-rest-paramter">My personal thoughts on the rest paramter</h3>
+<p>While I like the rest paramter, I feel as if it could&#8217;ve been defined better. For example, there is little ambiguity when I write <code>(...a, b)</code>&#8211;I refer to an array <code>a</code> containing all but the last argument, which then is <code>b</code>. The question then is what the behaviour would be when only a single argument is passed. I would say that <code>a</code> should contain a single member, and let <code>b</code> be undefined, though I&#8217;m sure there would be contention on this subject.</p>
 <h2 id="suggested-reading">Suggested reading</h2>
 <ul>
 <li><a href="http://blog.keithcirkel.co.uk/metaprogramming-in-es6-symbols/">Metaprogramming in ES6: Symbols and why they&#8217;re awesome</a> by Keith Cirkel.</li>
