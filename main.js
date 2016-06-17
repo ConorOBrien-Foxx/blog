@@ -1,6 +1,7 @@
 window.addEventListener("load", function(){
 	var span = document.createElement("span");
-	span.style.float = "right";
+	span.style.position = "absolute";
+	span.style.right = "20px";
 	span.innerHTML = "<a target=\"_blank\" href=\"https://github.com/ConorOBrien-Foxx/blog/commits/gh-pages.atom\">Subscribe!</a>";
 	document.querySelector("header").appendChild(span);
 });

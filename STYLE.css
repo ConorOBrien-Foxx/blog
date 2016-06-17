@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,300italic,600italic,700,700italic,800,800italic|Source+Code+Pro:400,300,700&subset=latin,greek,greek-ext);
+@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono);
 html {
 	font-family: "Open Sans", sans-serif;
 }
@@ -9,23 +10,60 @@ body {
 
 code, pre, textarea {
 	font-family: "Source Code Pro", "Consolas", monospace;
-	font-size: 14px;
+	font-size: 0.875em;
+}
+
+#container h1 {
+	font-size: 42px;
+	text-align: center;
+}
+
+#container h2 {
+	font-size: 32px;
+}
+
+#container h3 {
+	font-weight: normal;
+	font-size: 26px;
+}
+
+#container p:first-child {
+	text-align: center;
 }
 
 h1, h2, h3, h4, h5, h6, header { font-family: "Open Sans", "Source Code Pro", "Consolas", monospace; color: rgb(30,90,40); }
 
-code {
+pre {
 	background: #eee;
-	padding: 3px;
+	padding: 10px;
 	border-radius: 5px;
+}
+
+pre code {
+	font-size: 1em;
+}
+
+p code {
+	background: #eee;
+	padding: 5px;
+	border-radius: 5px;
+	white-space: nowrap;
+}
+
+pre.tight {
+	line-height: 1;
+}
+
+pre.tight code {
+	font-family: monospace;
 }
 
 a {
 	text-decoration: none;
-	color: #69a162;
+	color: #367410;
 }
 a:hover {
-	color: #8bc384;
+	color: #69a162;
 	transition: .1s all linear;
 }
 
